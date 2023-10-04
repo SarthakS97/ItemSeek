@@ -4,6 +4,8 @@ import axios from 'axios';
 const ImageUploader = () => {
   const [image, setImage] = useState(null);
   const [visualMatches, setVisualMatches] = useState([]);
+  const [loading, setLoading] = useState(false); // New state for loading pop-up
+
 
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
@@ -30,6 +32,7 @@ const ImageUploader = () => {
         setVisualMatches(backendResponse.data.visualMatches || []);
       } catch (error) {
         console.error('Error sending image URL to backend:', error);
+        setLoading(false); // Hide loading pop-up
       }
 
     } catch (error) {
@@ -47,6 +50,7 @@ const ImageUploader = () => {
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css"></link>
       <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'block', margin: 'auto' }} />
       {image && <img src={image} alt="Uploaded" style={{ width: '300px' }} />}
+      {loading && <h2>Loading...</h2>} {/* Display "Loading..." when loading is true */}
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
         {
           visualMatches.map((match, index) => {
